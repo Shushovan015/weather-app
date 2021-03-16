@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 
 const api = {
-  key : "a550cea8b77b8a143029958b3ddd8086",
-  base : "https://api.openweathermap.org/data/2.5/"
+  key : "2b6c8e547d62c802a0866bcd834916df",
+  base : "http://api.openweathermap.org/data/2.5/"
 }
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
 
   const search = evt => {
     if(evt.key === "Enter"){
-      fetch(`${api.base}weather?q=${query}$units=metric$APPID=${api.key}`)
+      fetch(`${api.base}weather?q=${query}$appid=${api.key}`)
         .then(res => res.json())
         .then(result => {
           setWeather(result);
@@ -42,16 +42,20 @@ function App() {
           onChange={e => setQuery(e.target.value)} value={query} 
           onKeyPress={search} />
         </div>
-        <div className="location-box">
-          <div className="location">Kathmandu, Nepal</div>
-          <div className="date">{dateBuilder(new Date())}</div>
-        </div>
-        <div className="weather-box">
-          <div className="temp">
-            15 C
+          {(typeof weather.main != "undefined") ? ( 
+        <div>
+          <div className="location-box">
+            <div className="location">{weather.name},{weather.sys.country}</div>
+            <div className="date">{dateBuilder(new Date())}</div>
           </div>
-          <div className="weather">Sunny</div>
+          <div className="weather-box">
+            <div className="temp">
+              {Math.round(weather.main.temp)} C
+            </div>
+            <div className="weather">Sunny</div>
+          </div>
         </div>
+        ) : ('') }
       </main>
     </div>
   );
